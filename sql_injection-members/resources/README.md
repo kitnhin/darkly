@@ -1,11 +1,11 @@
 # SQL Injection Vulnerability Exploitation
 
-While exploring the members page, I found an input box in the members page, I submitted an empty value returned a MariaDB error message:
+While exploring the members page, we found an input box in the members page, we submitted an empty value returned a MariaDB error message:
 ```
 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
 ```
 
-This error confirmed that user input was being directly inserted into SQL queries without proper sanitization.
+This error confirmed that user input was being directly inserted into SQL queries without proper sanitization, and SQL injection is possible.
 
 ## 1 - Understanding the Query Structure
 
@@ -16,14 +16,14 @@ First name: one
 Surname: me
 ```
 
-This revealed that the backend executes a query similar to:
+This revealed that the backend executes a query that looks something like:
 ```sql
 SELECT [firstname_column], [surname_column], ... FROM [user_table] WHERE [id_column]=[input]
 ```
 
 ## 2 - Extracting All Records
 
-To retrieve all entries from the database, I injected `1 OR 1=1`, which modified the query to:
+To extract all entries from the database, I injected `1 OR 1=1`, which modified the query to:
 ```sql
 SELECT [firstname_column], [surname_column], ... FROM [user_table] WHERE [id_column]=1 OR 1=1
 ```
@@ -59,7 +59,7 @@ Scrolling through the results revealed the target table was named `users`.
 
 [Mariadb information schema COLUMNS documentation](https://mariadb.com/docs/server/reference/system-tables/information-schema/information-schema-tables/information-schema-columns-table)
 
-Next, I used `information_schema.columns` to discover all columns in the `users` table:
+Next, we used `information_schema.columns` to discover all columns in the `users` table:
 ```sql
 1 UNION SELECT table_name, column_name FROM information_schema.columns
 ```
@@ -68,12 +68,12 @@ The results showed the `users` table contained columns including `first_name`, `
 
 ## 6 - Extracting Column Data
 
-I then extracted data from each column using:
+We then extracted data from each column using:
 ```sql
 1 UNION SELECT [col1], [col2] FROM users
 ```
 
-After analyzing each column, I found the encrypted flag hidden in the `Commentaire` and `countersign` columns of the last user entry:
+After analyzing each column, we found the encrypted flag hidden in the `Commentaire` and `countersign` columns of the last user entry:
 
 ![Encrypted flag displayed](./images/displayed_encrypted_flag.png)
 
@@ -83,6 +83,6 @@ The extracted value was a 32-character hexadecimal string, indicating MD5 encryp
 
 ![Decrypted flag](./images/decrypted_flag.png)
 
-Following the instructions, I converted the decrypted string to lowercase and encoded it using SHA-256 to obtain the final flag:
+Following the instructions, we converted the decrypted string to lowercase and encoded it using SHA-256 to obtain the final flag:
 
 ![Final flag](./images/final_flag.png)
