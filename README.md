@@ -2,7 +2,7 @@
 
 42 web security project
 
-(4 / 14) found :sob:
+(6 / 14) found :sob:
 
 Order found:
 
@@ -11,3 +11,4 @@ Order found:
 3) sql_injection-search_image
 4) xss-feedback
 5) web_scraping-robotstxt_hidden
+6) directory traversal
