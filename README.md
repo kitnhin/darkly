@@ -2,7 +2,7 @@
 
 42 web security project
 
-(6 / 14) found :sob:
+(7 / 14) found :sob:
 
 Order found:
 
@@ -12,3 +12,4 @@ Order found:
 4) xss-feedback
 5) web_scraping-robotstxt_hidden
 6) directory traversal
+7) cookie tampering
